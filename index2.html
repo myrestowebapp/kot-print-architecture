@@ -288,7 +288,9 @@
   .agent-card p{font-size:12.5px; opacity:0.68; line-height:1.55;}
 
   /* -------- stack -------- */
-  .stack-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px;}
+  .stack-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media (max-width:900px){ .stack-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:480px){ .stack-grid{grid-template-columns:1fr;} }
   .stack-card{border:1px solid var(--line); background:var(--ink-soft); padding:20px 18px; text-align:left;}
   .stack-card .layer{font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--rail); margin-bottom:10px;}
   .stack-card .tech{font-size:15.5px; font-weight:700; margin-bottom:6px;}
@@ -483,6 +485,104 @@
   .foot-note{font-family:var(--mono); font-size:11.5px; opacity:0.4; letter-spacing:0.03em;}
 
   ::selection{background:var(--rail); color:var(--paper);}
+
+  /* -------- accessibility: focus states -------- */
+  a:focus-visible, button:focus-visible, .tab-btn:focus-visible, input:focus-visible{
+    outline:2px solid var(--rail); outline-offset:2px; border-radius:2px;
+  }
+
+  /* -------- anchor offset so sticky topbar doesn't cover headings -------- */
+  section, header.hero{ scroll-margin-top:70px; }
+
+  /* -------- reading progress bar -------- */
+  .progress-track{
+    position:sticky; top:0; z-index:51; height:2px; width:100%;
+    background:transparent;
+  }
+  .progress-bar{
+    height:100%; width:0%; background:var(--rail);
+    box-shadow:0 0 8px var(--rail-soft);
+    transition:width .1s linear;
+  }
+
+  /* -------- desktop nav active state -------- */
+  .topnav a.active{ opacity:1; color:var(--rail); }
+
+  /* -------- mobile nav toggle -------- */
+  .nav-toggle{
+    display:none; background:none; border:1px solid var(--line-strong);
+    border-radius:3px; padding:8px 10px; cursor:pointer; color:var(--paper);
+  }
+  .nav-toggle svg{ width:18px; height:18px; display:block; fill:none; stroke:currentColor; stroke-width:1.6; }
+  @media (max-width:800px){ .nav-toggle{ display:flex; align-items:center; gap:8px; } }
+
+  .mobile-nav{
+    display:none; max-height:0; overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:var(--ink-soft);
+    transition:max-height .28s ease;
+  }
+  .mobile-nav.open{ max-height:480px; }
+  @media (max-width:800px){ .mobile-nav{ display:block; } }
+  .mobile-nav-inner{
+    padding:8px 20px 18px; display:flex; flex-direction:column;
+  }
+  .mobile-nav a{
+    font-family:var(--mono); font-size:13px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:12px 4px; border-bottom:1px solid var(--line); text-decoration:none; opacity:0.7;
+  }
+  .mobile-nav a.active{ opacity:1; color:var(--rail); }
+  .mobile-nav a:last-child{ border-bottom:none; }
+
+  /* -------- back to top -------- */
+  .back-to-top{
+    position:fixed; left:24px; bottom:24px; z-index:45;
+    width:44px; height:44px; border-radius:50%;
+    background:var(--ink-soft); border:1px solid var(--line-strong);
+    color:var(--paper); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transform:translateY(8px);
+    transition:opacity .2s, transform .2s, background .2s;
+    box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  }
+  .back-to-top.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+  .back-to-top:hover{ background:var(--rail-soft); }
+  .back-to-top svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; }
+  @media (max-width:480px){ .back-to-top{ left:16px; bottom:16px; width:40px; height:40px; } }
+
+  /* -------- copy button on code block -------- */
+  .kot-json{ position:relative; }
+  .copy-btn{
+    position:absolute; top:10px; right:10px;
+    font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.05em;
+    background:var(--ink-soft); border:1px solid var(--line-strong); color:var(--paper);
+    padding:5px 10px; border-radius:3px; cursor:pointer; opacity:0.7;
+    transition:opacity .15s, background .15s, border-color .15s;
+  }
+  .copy-btn:hover{ opacity:1; border-color:var(--rail); }
+  .copy-btn.copied{ color:var(--ok); border-color:var(--ok); opacity:1; }
+
+  /* -------- youtube search filter -------- */
+  .yt-search-wrap{ padding:12px 20px 4px; }
+  .yt-search{
+    width:100%; background:var(--ink); border:1px solid var(--line-strong);
+    color:var(--paper); font-family:var(--sans); font-size:13px;
+    padding:9px 12px; border-radius:3px;
+  }
+  .yt-search::placeholder{ color:var(--paper); opacity:0.4; }
+  .yt-item.hidden, .yt-group-label.hidden{ display:none; }
+  .yt-empty{
+    padding:24px 20px; text-align:center; font-size:12.5px; opacity:0.5;
+    font-family:var(--mono); display:none;
+  }
+  .yt-empty.show{ display:block; }
+
+  /* -------- scroll reveal -------- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
 </style>
 </head>
 <body>
@@ -502,6 +602,24 @@
       <a href="#stack">Stack</a>
       <a href="#roadmap">Roadmap</a>
     </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" id="navToggleIcon"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-inner">
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#queue">Queue</a>
+      <a href="#multi-kot">Multi-KOT</a>
+      <a href="#transport">Transports</a>
+      <a href="#market">Market</a>
+      <a href="#routing">Multi-Kitchen</a>
+      <a href="#unify">Format</a>
+      <a href="#stack">Stack</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
   </div>
 </div>
 
@@ -592,8 +710,7 @@
       </p>
       <p>
         The fix isn't a better Bluetooth trick. It's making sure <strong>only one thing ever holds that
-        Bluetooth session per printer</strong>, and giving every other device a different, shareable way
-        to reach it — whether you run one kitchen or five.
+        Bluetooth session</strong>, and giving every other device a different, shareable way to reach it.
       </p>
     </div>
     <div>
@@ -607,11 +724,7 @@
       </div>
       <div class="fact-card">
         <div class="k">Right fix</div>
-        <div class="v">One device owns each printer's Bluetooth link. Everyone else reaches it over a network.</div>
-      </div>
-      <div class="fact-card">
-        <div class="k">Multi-kitchen</div>
-        <div class="v">Each station printer needs its own agent device — scale by adding agents, not by sharing Bluetooth.</div>
+        <div class="v">One device owns the Bluetooth link. Everyone else reaches it over a network.</div>
       </div>
     </div>
   </div>
@@ -619,7 +732,7 @@
 
 <section id="solution" class="wrap">
   <div class="section-head">
-    <h2>The solution: Print Agents between your captains and every kitchen printer</h2>
+    <h2>The solution: a Print Agent between your captains and the printer</h2>
     <span class="section-num">02 / Solution</span>
   </div>
   <p class="lede">
@@ -677,7 +790,7 @@
     </div>
     <div class="mode-steps">
       <div class="mode-step"><div class="n">01</div>Agent opens an outbound WebSocket to your backend — same pattern as a Socket.io client.</div>
-      <div class="mode-step"><div class="n">02</div>Captains send KOTs to your API; backend routes each job to the right restaurant and printer agent by ID.</div>
+      <div class="mode-step"><div class="n">02</div>Captains send KOTs to your API from anywhere; backend routes to the right restaurant's agent.</div>
       <div class="mode-step"><div class="n">03</div>Backend queues jobs if the agent briefly disconnects, and flushes on reconnect.</div>
       <div class="mode-step"><div class="n">04</div>Recommended for a multi-location SaaS: gives you centralized print-failure visibility across every restaurant.</div>
     </div>
@@ -825,6 +938,7 @@
         </svg>
       </div>
       <div class="kot-json">
+        <button class="copy-btn" id="copyKotJson" type="button">Copy</button>
         {<br>
         &nbsp;&nbsp;<span class="key">"kot_id"</span>: <span class="str">"KOT-1042-003"</span>,<br>
         &nbsp;&nbsp;<span class="key">"order_id"</span>: <span class="str">"ORD-1042"</span>,<br>
@@ -860,17 +974,17 @@
     <div class="topt recommended">
       <span class="opt-badge">Recommended</span>
       <div class="opt-head"><span class="opt-name">1 · Print Server + WebSocket</span><span class="stars">★★★★★</span></div>
-      <div class="opt-diagram">Captain 1‑N ─┐<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ WS Server ─ Dispatcher ─ Agent × kitchens ─ BT Printers<br>Captain N ───┘</div>
+      <div class="opt-diagram">Captain 1‑4 ─┐<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ WS Server ─ Print Agent ─ BT Printer<br>Captain N ──┘</div>
       <ul class="opt-points">
-        <li>One Bluetooth connection per printer, unlimited captain devices</li>
+        <li>One Bluetooth connection, unlimited captain devices</li>
         <li>Sub-second latency, push-based — no polling delay</li>
-        <li>Native support for print queue, retries, reprints, and multi-KOT splitting</li>
+        <li>Native support for print queue, retries, reprints</li>
         <li>Reuses your existing paired printer hardware as-is</li>
       </ul>
     </div>
 
     <div class="topt">
-      <div class="opt-head"><span class="opt-name">2 · Network (WiFi/Ethernet) Printer</span><span class="stars">★★★★★<span class="dim"></span></span></div>
+      <div class="opt-head"><span class="opt-name">2 · Network (WiFi/Ethernet) Printer</span><span class="stars">★★★★★</span></div>
       <div class="opt-diagram">Captain 1‑4 ─── ESC/POS over TCP:9100 ─── WiFi Printer</div>
       <ul class="opt-points">
         <li>No Bluetooth limitation at all — printer accepts many sources</li>
@@ -1087,8 +1201,7 @@
   </div>
   <div class="unify-note">
     <strong>The fix:</strong> don't format ESC/POS on the client at all. Your backend generates one
-    canonical KOT payload — <code>kot_id</code>, <code>kot_type</code>, <code>order_id</code>, table, items,
-    quantities, notes, <code>printer_id</code>, timestamp — and both QZ Tray
+    canonical KOT payload — table, order ID, items, quantities, notes, timestamp — and both QZ Tray
     and the Android Print Agent render it through the <strong>same shared Renderer Library</strong>,
     a single piece of logic that turns KOT JSON into ESC/POS commands and consults the printer registry
     for width and encoding. Change the renderer once, and every agent — desktop or mobile, today or
@@ -1103,40 +1216,30 @@
     <span class="section-num">09 / Stack</span>
   </div>
   <p class="lede">
-    A concrete, buildable slice of the architecture above — sized for multi-kitchen, multi-KOT operations
-    from day one, with every future adapter (Windows, Linux, cloud gateway) slotting into the same
-    Print Job Service without touching the captain app.
+    A concrete, buildable slice of the architecture above — sized for where the platform is today,
+    with every future adapter (Windows, Linux, cloud gateway) slotting into the same Print Job Service
+    without touching the captain app.
   </p>
   <div class="stack-grid">
     <div class="stack-card">
       <div class="layer">Captain client</div>
       <div class="tech">Flutter app</div>
-      <div class="role">Emits one KOT JSON per print event (NEW, ADD, VOID) — never talks to a printer directly.</div>
+      <div class="role">Creates the KOT JSON and sends it — never talks to a printer directly.</div>
     </div>
     <div class="stack-card">
       <div class="layer">Dispatch layer</div>
       <div class="tech">Node.js + WebSocket server</div>
-      <div class="role">Splits orders into per-station KOTs; routes by printer ID and kot_type; tracks job lifecycle.</div>
-    </div>
-    <div class="stack-card">
-      <div class="layer">Printer registry</div>
-      <div class="tech">Station → printer ID map</div>
-      <div class="role">Maps menu items to kitchens (main, tandoor, bar, bakery) and stores per-printer profiles.</div>
+      <div class="role">Routes each job to the right printer ID; tracks status through the job lifecycle.</div>
     </div>
     <div class="stack-card">
       <div class="layer">Print agent</div>
-      <div class="tech">Android · one per kitchen</div>
-      <div class="role">Holds the sole Bluetooth pairing for its printer; drains its own FIFO queue independently.</div>
-    </div>
-    <div class="stack-card">
-      <div class="layer">Renderer</div>
-      <div class="tech">Shared ESC/POS library</div>
-      <div class="role">Turns canonical KOT JSON into print bytes; adapts layout per printer profile (58 / 80 mm).</div>
+      <div class="tech">Android background service</div>
+      <div class="role">Holds the sole Bluetooth pairing; renders and prints via ESC/POS on receipt.</div>
     </div>
     <div class="stack-card">
       <div class="layer">Resilience</div>
       <div class="tech">Offline queue + auto-retry</div>
-      <div class="role">Jobs persist locally per agent if the printer disconnects, and flush the moment it's back.</div>
+      <div class="role">Jobs persist locally if the printer disconnects, and flush the moment it's back.</div>
     </div>
   </div>
 </section>
@@ -1181,12 +1284,11 @@
       </div>
       <div class="rstep-right">
         <h4>Define the canonical KOT schema</h4>
-        <p>Lock a single JSON shape for every kitchen ticket — including <code>kot_type</code> (NEW, ADD, VOID),
-        <code>parent_kot_id</code>, and <code>printer_id</code> — shared across backend, QZ Tray, and every agent.
-        This becomes the one source of truth for multi-KOT and multi-kitchen routing.</p>
+        <p>Lock a single JSON shape for a kitchen ticket, shared across backend, QZ Tray, and the new agent.
+        This becomes the one source of truth for every printer format going forward.</p>
         <div class="rstep-tags">
           <span class="rstep-tag">JSON schema</span>
-          <span class="rstep-tag">Multi-KOT types</span>
+          <span class="rstep-tag">ESC/POS mapping</span>
           <span class="rstep-tag">QZ Tray compat</span>
         </div>
       </div>
@@ -1217,14 +1319,13 @@
         <span class="rstep-dot"></span>
       </div>
       <div class="rstep-right">
-        <h4>Wire multi-kitchen routing and KOT splitting</h4>
-        <p>Stand up the printer registry (item → station → printer ID), deploy one agent per kitchen,
-        and verify that a single order correctly fans out into parallel KOTs — kitchen, bar, tandoor —
-        with add-on and void tickets routing to the right station.</p>
+        <h4>Pilot in cloud-relay mode</h4>
+        <p>Roll out at one location first, watching for reconnect behavior, queue depth under load, and
+        real print latency during a rush.</p>
         <div class="rstep-tags">
-          <span class="rstep-tag">Printer registry</span>
-          <span class="rstep-tag">Multi-kitchen</span>
-          <span class="rstep-tag">KOT splitter</span>
+          <span class="rstep-tag">Single location</span>
+          <span class="rstep-tag">Load testing</span>
+          <span class="rstep-tag">Reconnect behavior</span>
         </div>
       </div>
     </li>
@@ -1232,17 +1333,17 @@
     <li class="rstep">
       <div class="rstep-left">
         <span class="rstep-num">05</span>
-        <span class="rstep-phase ph-reliability">Reliability</span>
+        <span class="rstep-phase ph-scale">Scale</span>
         <span class="rstep-dot"></span>
       </div>
       <div class="rstep-right">
-        <h4>Pilot in cloud-relay mode</h4>
-        <p>Roll out at one multi-kitchen location first, watching for reconnect behavior, per-station queue
-        depth under load, and real print latency during a rush.</p>
+        <h4>Add centralized monitoring</h4>
+        <p>Surface printer-offline and job-failure alerts per restaurant in your admin dashboard — this is
+        the piece that pays off as you scale past one location.</p>
         <div class="rstep-tags">
-          <span class="rstep-tag">Multi-kitchen pilot</span>
-          <span class="rstep-tag">Load testing</span>
-          <span class="rstep-tag">Reconnect behavior</span>
+          <span class="rstep-tag">Admin dashboard</span>
+          <span class="rstep-tag">Failure alerts</span>
+          <span class="rstep-tag">Multi-location</span>
         </div>
       </div>
     </li>
@@ -1254,13 +1355,13 @@
         <span class="rstep-dot"></span>
       </div>
       <div class="rstep-right">
-        <h4>Add centralized monitoring</h4>
-        <p>Surface printer-offline and job-failure alerts per restaurant and per station in your admin
-        dashboard — kitchen down shouldn't mean bar tickets stop too.</p>
+        <h4>Evaluate network printers as a hardware option</h4>
+        <p>For new installs, consider Ethernet/WiFi thermal printers (raw ESC/POS over TCP 9100) behind the
+        same agent and queue — removing the Bluetooth ceiling at the hardware layer too.</p>
         <div class="rstep-tags">
-          <span class="rstep-tag">Admin dashboard</span>
-          <span class="rstep-tag">Per-station alerts</span>
-          <span class="rstep-tag">Multi-location</span>
+          <span class="rstep-tag">TCP 9100</span>
+          <span class="rstep-tag">WiFi / Ethernet</span>
+          <span class="rstep-tag">New installs</span>
         </div>
       </div>
     </li>
@@ -1272,27 +1373,9 @@
         <span class="rstep-dot"></span>
       </div>
       <div class="rstep-right">
-        <h4>Evaluate network printers as a hardware option</h4>
-        <p>For new installs, consider Ethernet/WiFi thermal printers (raw ESC/POS over TCP 9100) behind the
-        same agent and queue — one agent can drive several network printers without the Bluetooth limit.</p>
-        <div class="rstep-tags">
-          <span class="rstep-tag">TCP 9100</span>
-          <span class="rstep-tag">WiFi / Ethernet</span>
-          <span class="rstep-tag">Multi-printer agent</span>
-        </div>
-      </div>
-    </li>
-
-    <li class="rstep">
-      <div class="rstep-left">
-        <span class="rstep-num">08</span>
-        <span class="rstep-phase ph-scale">Scale</span>
-        <span class="rstep-dot"></span>
-      </div>
-      <div class="rstep-right">
         <h4>Move to MQTT once printer count grows</h4>
-        <p>When a branch has many stations — kitchen, tandoor, Chinese, bar, bakery — revisit MQTT for its
-        built-in reconnect and per-topic delivery, without changing the KOT schema or captain app.</p>
+        <p>When a branch has several stations — kitchen, bar, bakery — revisit MQTT for its built-in
+        reconnect and multi-subscriber delivery, without changing the KOT schema or captain app.</p>
         <div class="rstep-tags">
           <span class="rstep-tag">MQTT broker</span>
           <span class="rstep-tag">Multi-printer</span>
@@ -1307,9 +1390,13 @@
 <footer class="wrap">
   <div class="foot-inner">
     <div class="foot-note">myResto Today — KOT Print Architecture Reference</div>
-    <div class="foot-note">Many kitchens. Many KOTs. Any number of captains. No format drift.</div>
+    <div class="foot-note">One printer. Any number of captains. No format drift.</div>
   </div>
 </footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">
+  <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <div class="yt-overlay" id="ytOverlay"></div>
 
@@ -1331,7 +1418,12 @@
     <button class="yt-close" id="ytClose" aria-label="Close panel">✕</button>
   </div>
 
-  <div class="yt-list">
+  <div class="yt-search-wrap">
+    <input type="text" class="yt-search" id="ytSearch" placeholder="Filter videos (e.g. MQTT, WebSocket, Android)…" autocomplete="off">
+  </div>
+
+  <div class="yt-list" id="ytList">
+    <div class="yt-empty" id="ytEmpty">No videos match that search.</div>
 
     <!-- WebSocket & Real-time -->
     <div class="yt-group-label">WebSocket &amp; Real-time</div>
@@ -1509,10 +1601,14 @@
 
 <script>
   document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.setAttribute('role','tab');
+    btn.setAttribute('aria-selected', btn.classList.contains('active') ? 'true' : 'false');
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const group = btn.closest('.tabs');
+      group.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
     });
   });
@@ -1537,7 +1633,105 @@
   ytToggle.addEventListener('click', openPanel);
   ytClose.addEventListener('click', closePanel);
   ytOverlay.addEventListener('click', closePanel);
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closePanel(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closePanel(); closeMobileNav(); } });
+
+  // YouTube video search/filter
+  const ytSearch = document.getElementById('ytSearch');
+  const ytEmpty  = document.getElementById('ytEmpty');
+  ytSearch.addEventListener('input', () => {
+    const q = ytSearch.value.trim().toLowerCase();
+    let anyVisible = false;
+    document.querySelectorAll('.yt-group-label').forEach(label => {
+      let groupHasVisible = false;
+      let node = label.nextElementSibling;
+      while(node && node.classList.contains('yt-item')){
+        const text = node.textContent.toLowerCase();
+        const match = q === '' || text.includes(q);
+        node.classList.toggle('hidden', !match);
+        if(match){ groupHasVisible = true; anyVisible = true; }
+        node = node.nextElementSibling;
+      }
+      label.classList.toggle('hidden', !groupHasVisible);
+    });
+    ytEmpty.classList.toggle('show', !anyVisible);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  function closeMobileNav(){
+    mobileNav.classList.remove('open');
+    navToggle.setAttribute('aria-expanded','false');
+  }
+  navToggle.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
+
+  // Reading progress bar
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+
+  // Back to top
+  const backToTop = document.getElementById('backToTop');
+  function updateBackToTop(){
+    backToTop.classList.toggle('show', window.scrollY > 600);
+  }
+  backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  window.addEventListener('scroll', () => {
+    updateProgress();
+    updateBackToTop();
+  }, { passive: true });
+  updateProgress();
+  updateBackToTop();
+
+  // Scrollspy — highlight active nav link
+  const navLinks = document.querySelectorAll('.topnav a, .mobile-nav a');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function setActiveLink(id){
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+  }
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){ setActiveLink(entry.target.id); }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+  sections.forEach(sec => spyObserver.observe(sec));
+
+  // Copy KOT JSON snippet
+  const copyBtn = document.getElementById('copyKotJson');
+  if(copyBtn){
+    copyBtn.addEventListener('click', () => {
+      const block = copyBtn.closest('.kot-json');
+      const text = block.innerText.replace(/^Copy\s*/,'').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'Copied ✓';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1800);
+      });
+    });
+  }
+
+  // Fade-in reveal for sections as they enter view
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('section').forEach(sec => {
+    sec.classList.add('reveal');
+    revealObserver.observe(sec);
+  });
 </script>
 
 </body>
